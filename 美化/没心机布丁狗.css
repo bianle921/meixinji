@@ -1,0 +1,459 @@
+/* 没心机 · 自定义即时密谈 #chat-screen（🍮 布丁狗终极定制版 + 甜点级红包卡 + 三只趴趴狗） */
+
+
+/* 核心变量池：注入布丁狗专属调色板 */
+#chat-screen { 
+  /* --- 🍮 核心配色 --- */
+  --bg-device: #fffdf4; /* 淡淡的奶糊底色，整个背景 */
+  --bg-card: #ffffff; /* 卡片白底 */
+  --bg-bubble-bot: #e8d3be; /* 🍮 左侧气泡：浅拿铁棕 */
+  --bg-bubble-user: #fff4c2; /* 🍮 右侧气泡：布丁淡黄色 */
+  --text-main: #563624; /* 焦糖布丁深棕（主文本） */
+  --text-sub: #9c7c66; /* 拿铁浅棕（次要文本/时间戳） */
+  --accent: #fadb5f; /* 布丁狗明黄（强调色） */
+  --line: rgba(86, 54, 36, 0.12); /* 焦糖色系半透明边框 */
+  --tint-rgb: 250, 219, 95; /* accent 的 RGB，用于特效 */
+  --shadow-card: 0 4px 14px rgba(86, 54, 36, 0.08); /* 暖棕色投影 */
+
+
+  background: var(--bg-device); 
+  color: var(--text-main); 
+  --chat-screen-scroll-pad-x: 14px; 
+  --chat-screen-scroll-pad-bottom: 10px; 
+  --chat-screen-scroll-gap: 16px; /* 给圆角气泡和趴趴挂件留足空间 */
+}
+
+
+/* 背景光斑与水印 */
+#chat-screen .settings-ambient-blob--a,
+#chat-screen .settings-ambient-blob--b { opacity: 0.5; filter: blur(56px); background: #fff4c2 !important; }
+#chat-screen .chat-watermark { opacity: 0.15; color: var(--text-sub); }
+
+
+/* 主列噪点 */
+#chat-screen .chat-filmgrain { opacity: 0.25; }
+
+
+/* 主列布局与滚动 */
+#chat-screen .chat-body-stack { min-height: 0; }
+#chat-screen #chat-messages-stack { position: relative; }
+
+
+/* 🌟 顶栏：布丁狗贝雷帽变浅后的温柔奶咖棕 🌟 */
+#chat-screen:not(.chat-screen--dossier-open):not(.chat-screen--memo-open) .chat-screen-topbar { 
+  background: rgba(196, 154, 108, 0.95); /* 调浅的柔和棕色 */
+  border-bottom: 1px solid rgba(136, 88, 60, 0.3); 
+  backdrop-filter: blur(22px); 
+}
+#chat-screen .chat-screen-topbar #chat-meta-label,
+#chat-screen .chat-screen-topbar #chat-meta-eyebrow,
+#chat-screen .chat-screen-topbar #chat-masthead-k { color: rgba(255, 253, 244, 0.85) !important; }
+#chat-screen .chat-screen-topbar #chat-close { color: #fffdf4 !important; }
+#chat-screen .chat-screen-topbar #chat-masthead-title { color: #fffdf4 !important; font-weight: bold; }
+#chat-screen .chat-screen-topbar .chat-thread-detail-tape-btn-sheen { opacity: 0.15; }
+
+
+/* 身份卡 */
+#chat-screen .chat-identity-wrap .chat-slab-mat { background: var(--bg-card); border-color: var(--line); }
+#chat-screen .chat-identity-wrap .chat-slab-panel.chat-identity-panel {
+  transform: none; background: var(--bg-card); border: 1px solid var(--line); box-shadow: var(--shadow-card);
+}
+#chat-screen .chat-slab-spine, #chat-screen .chat-thread-stamp,
+#chat-screen .chat-live-pill, #chat-screen .chat-corner-stamp { color: var(--text-sub); }
+#chat-screen .chat-header-face { border: 2px solid #fff4c2; box-shadow: 0 0 0 1px var(--line); } 
+#chat-screen #chat-masthead-k { color: var(--text-sub); }
+#chat-screen #chat-masthead-title { color: var(--text-main); }
+#chat-screen .chat-scene-pull { color: var(--text-sub); }
+
+
+/* 消息区头像与时间分隔 */
+#chat-screen .chat-messages-stack--custom-bg .chat-messages-wallpaper { opacity: 1; }
+#chat-screen .chat-msg-avatar { border: 1px solid var(--line); background: var(--bg-card); }
+#chat-screen .chat-msg-meta { color: var(--text-sub); }
+#chat-screen .chat-time-divider-label { color: var(--text-sub); background: rgba(255,244,194,0.3); padding: 2px 8px; border-radius: 10px; }
+
+
+/* 🌟 气泡核心样式（开启大圆角） 🌟 */
+#chat-screen .chat-msg-bubble { position: relative; overflow: visible !important; }
+
+
+/* 左侧（角色/系统）：浅棕色底，大圆角 */
+#chat-screen .chat-msg--assistant .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice),
+#chat-screen .chat-msg--system .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice) { 
+  background: var(--bg-bubble-bot); 
+  color: var(--text-main); 
+  border: 1px solid var(--line); 
+  border-radius: 24px; 
+  box-shadow: var(--shadow-card); 
+}
+
+
+/* ✨ 左侧气泡左上角挂件 ✨ */
+#chat-screen .chat-msg--assistant .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice)::before,
+#chat-screen .chat-msg--system .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice)::before { 
+  content: "";
+  position: absolute;
+  top: -16px; 
+  left: -12px; 
+  width: 44px;
+  height: 44px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/accd16bddfe76e590eea127cc5b2902a.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 5;
+  pointer-events: none; 
+}
+
+
+/* 右侧（用户）：淡黄色底，大圆角 */
+#chat-screen .chat-msg--user .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice) { 
+  background: var(--bg-bubble-user); 
+  color: var(--text-main); 
+  border: 1px solid var(--line); 
+  border-radius: 24px; 
+  box-shadow: var(--shadow-card); 
+}
+
+
+/* ✨ 右侧气泡右上角挂件 ✨ */
+#chat-screen .chat-msg--user .chat-msg-bubble:not(.chat-msg-bubble--sticker):not(.chat-msg-bubble--typing):not(.chat-msg-bubble--voice)::after { 
+  content: "";
+  position: absolute;
+  top: -18px; 
+  right: -8px; 
+  width: 42px;
+  height: 42px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/771ed29bbd3930919d3bf25958a73a6a.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 5;
+  pointer-events: none; 
+}
+
+
+/* 贴纸与打字中状态 */
+#chat-screen .chat-msg-bubble--typing { border-radius: 24px; background: var(--bg-bubble-bot); border: 1px solid var(--line); }
+#chat-screen .chat-msg-bubble-quote { border-bottom: 1px dashed rgba(86,54,36,0.15); }
+#chat-screen .chat-msg--user .chat-msg-bubble-quote { border-bottom-color: rgba(86,54,36,0.15); }
+#chat-screen .chat-msg-narration { border: 1px dashed var(--line); border-radius: 16px; background: rgba(156,124,102,0.06); }
+
+
+
+/* =======================================
+   🌟 票根式功能卡片（通话 / 红包转账） 🌟
+   ======================================= */
+
+
+/* 1. 语音/视频通话卡片 */
+#chat-screen .chat-call-recap { 
+  background: var(--bg-bubble-user) !important; 
+  border: 2px dashed rgba(86, 54, 36, 0.25) !important; 
+  border-radius: 24px !important; 
+  box-shadow: var(--shadow-card) !important;
+  position: relative;
+  overflow: visible !important;
+}
+#chat-screen .chat-call-recap * { color: var(--text-main) !important; }
+
+
+/* ✨ 第三只狗：通话卡片专属（坐在右下角） ✨ */
+#chat-screen .chat-call-recap::after {
+  content: "";
+  position: absolute;
+  bottom: -12px; 
+  right: -10px; 
+  width: 55px;
+  height: 55px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/817ea6ba87a91990301aa6070f2e3b16.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(86, 54, 36, 0.15)); 
+  transform: rotate(-8deg); 
+}
+
+
+/* 2. 甜点级红包/转账卡片拼色美化 */
+#chat-screen .chat-redpack-head {
+  background: #fef1c7 !important; /* 更温柔的淡奶油黄 */
+  color: var(--text-main) !important;
+  border-bottom: 2px dashed rgba(86, 54, 36, 0.2) !important; /* 焦糖色虚线分割 */
+  border-radius: 24px 24px 0 0 !important;
+}
+#chat-screen .chat-redpack-body {
+  background: #e1c8b0 !important; /* 下半部换成温暖的拿铁浅棕色 */
+  color: var(--text-main) !important;
+  border-radius: 0 0 24px 24px !important;
+}
+#chat-screen .chat-redpack-body * { color: var(--text-main) !important; }
+
+
+/* 红包气泡外围描边 */
+#chat-screen .chat-msg-bubble:has(.chat-redpack-head) {
+  border: 2px solid rgba(86, 54, 36, 0.15);
+  border-radius: 24px;
+  position: relative;
+  overflow: visible !important;
+}
+
+
+/* ✨ 第三只狗：红包卡片专属（扒在黄棕交界线看里面） ✨ */
+#chat-screen .chat-msg-bubble:has(.chat-redpack-head)::after {
+  content: "";
+  position: absolute;
+  top: 38%; /* 大致挂在虚线分割线的位置 */
+  right: -22px; 
+  width: 60px;
+  height: 60px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/817ea6ba87a91990301aa6070f2e3b16.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 5px rgba(86, 54, 36, 0.2)); 
+  transform: rotate(6deg); /* 往红包方向微微歪头 */
+}
+/* ======================================= */
+
+
+
+/* 🌟 语音气泡 🌟 */
+#chat-screen .chat-msg-bubble--voice { border-radius: 24px; border: 1px solid var(--line); }
+#chat-screen .chat-msg--user .chat-msg-bubble--voice { background: var(--bg-bubble-user); }
+#chat-screen .chat-msg--assistant .chat-msg-bubble--voice { background: var(--bg-bubble-bot); }
+#chat-screen .chat-msg--assistant .chat-msg-bubble--voice *,
+#chat-screen .chat-msg--assistant .chat-msg-bubble--voice .chat-voice-duration {
+  color: var(--text-main) !important;
+}
+
+
+/* 对照翻译 */
+#chat-screen .chat-msg-bubble-trans-rule { background: rgba(86,54,36,0.08); }
+#chat-screen .chat-msg--assistant .chat-msg-bubble-body--translation,
+#chat-screen .chat-msg--system .chat-msg-bubble-body--translation,
+#chat-screen .chat-msg--user .chat-msg-bubble-body--translation { color: var(--text-sub); }
+#chat-screen .chat-msg--assistant .chat-msg-bubble-body--primary,
+#chat-screen .chat-msg--system .chat-msg-bubble-body--primary { color: var(--text-main); }
+
+
+/* 底部输入区 */
+#chat-screen .chat-composer { background: rgba(255, 253, 244, 0.9); border-top: 1px solid var(--line); backdrop-filter: blur(20px); }
+#chat-screen .chat-slab-panel.chat-composer-panel { border: 1px solid var(--line); background: var(--bg-card); border-radius: 24px; }
+#chat-screen .chat-composer-cap-l,
+#chat-screen .chat-composer-cap-r { color: var(--text-sub); }
+#chat-screen #chat-context-tokens { color: var(--text-sub); font-size: 0.68rem; }
+#chat-screen .chat-more-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--line); border-radius: 50%; }
+
+
+/* 发送键 */
+#chat-screen .chat-send-fab { background: var(--accent); color: var(--text-main); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(250, 219, 95, 0.4); border-radius: 50%; }
+#chat-screen .chat-input { color: var(--text-main); }
+
+
+/* 输入区引用预览 */
+#chat-screen .chat-input-quote { background: var(--bg-bubble-user); border: 1px dashed var(--line); border-radius: 16px; }
+
+
+/* 表情联想条 */
+#chat-screen .sticker-suggest { border: 1px solid var(--line); border-radius: 24px; background: var(--bg-device); }
+
+
+/* 消息长按菜单 */
+#chat-screen .chat-bubble-actions-back
+/* 没心机 · 当面晤面 #chat-offline-screen（🍮 布丁狗线下日记版 + 趴趴狗挂件） */
+
+
+/* —— 主题变量（注入布丁狗专属调色板） —— */
+#chat-offline-screen.chat-offline-screen {
+  --f2f-diary-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  --f2f-prose-max: min(100%, 56rem);
+  --f2f-composer-max: var(--f2f-prose-max);
+
+
+  /* 🍮 核心配色 */
+  --bg-device: #fffdf4; /* 奶糊底色 */
+  --bg-card: #ffffff;
+  --text-main: #563624; /* 焦糖深棕 */
+  --text-sub: #9c7c66; /* 拿铁浅棕 */
+  --accent: #fadb5f; /* 布丁明黄 */
+  --line: rgba(86, 54, 36, 0.15); /* 焦糖虚线/边框 */
+
+
+  /* 映射到日记卡变量 */
+  --f2f-card-user: #fff4c2; /* 🍮 用户日记卡：布丁淡黄色 */
+  --f2f-card-peer: #e8d3be; /* 🍮 角色日记卡：浅拿铁棕色 */
+  --f2f-card-border: var(--line);
+  --f2f-diary-shadow: 0 6px 28px rgba(86, 54, 36, 0.12); /* 暖色投影 */
+  --f2f-diary-head-bg: rgba(255, 253, 244, 0.45); /* 信头微微透明的奶黄 */
+
+
+  background: var(--bg-device);
+  color: var(--text-main);
+}
+
+
+/* 顶栏：晤面 · 长文、水印、返回 / 结束 */
+#chat-offline-screen .chat-offline-eyebrow { color: var(--text-sub); }
+#chat-offline-screen .chat-offline-watermark { opacity: 0.15; color: var(--text-sub); }
+#chat-offline-screen .chat-offline-fab-back,
+#chat-offline-screen .chat-offline-fab-end {
+  background: rgba(196, 154, 108, 0.95); /* 温柔的奶咖色 */
+  color: #fffdf4;
+  border: 1px solid rgba(136, 88, 60, 0.3);
+}
+
+
+/* 晤面壁纸（密谈 · 晤面壁纸） */
+#chat-offline-screen.chat-offline--thread-bg.chat-offline-screen {
+  background-color: var(--bg-device);
+  background-image: var(--chat-offline-wallpaper-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#chat-offline-screen.chat-offline--thread-bg .chat-offline-fab-back,
+#chat-offline-screen.chat-offline--thread-bg .chat-offline-fab-end {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* 🌟 日记卡：全面 Q 弹化 🌟 */
+#chat-offline-screen .chat-f2f-diary-head { background: var(--f2f-diary-head-bg); }
+#chat-offline-screen .chat-f2f-diary-name {
+  font-family: var(--f2f-diary-serif);
+  color: var(--text-main);
+  font-weight: bold;
+}
+#chat-offline-screen .chat-f2f-diary-sub { color: var(--text-sub); }
+#chat-offline-screen .chat-f2f-diary-polaroid {
+  background: #fff;
+  border: 2px solid #fff4c2;
+  box-shadow: 0 4px 18px rgba(86, 54, 36, 0.15);
+}
+
+
+/* 信纸核心样式 */
+#chat-offline-screen .chat-msg-bubble-stack.chat-f2f-diary-sheet {
+  background-color: var(--f2f-card-peer) !important;
+  border: 1px dashed var(--f2f-card-border) !important; /* 改成可爱的虚线边框 */
+  box-shadow: var(--f2f-diary-shadow) !important;
+  border-radius: 24px !important; /* ✨ 24px 大圆角信纸 */
+  position: relative;
+  overflow: visible !important;
+}
+#chat-offline-screen .chat-msg--user .chat-msg-bubble-stack.chat-f2f-diary-sheet {
+  background-color: var(--f2f-card-user) !important;
+}
+
+
+/* 覆盖壁纸时的默认白底，保持我们的布丁狗配色 */
+#chat-offline-screen.chat-offline--thread-bg .chat-msg-bubble-stack.chat-f2f-diary-sheet {
+  background-color: var(--f2f-card-peer) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#chat-offline-screen.chat-offline--thread-bg .chat-msg--user .chat-msg-bubble-stack.chat-f2f-diary-sheet {
+  background-color: var(--f2f-card-user) !important;
+}
+#chat-offline-screen.chat-offline--thread-bg .chat-f2f-diary-head {
+  background: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#chat-offline-screen .chat-f2f-diary-date { color: var(--text-sub); }
+
+
+/* ✨ 趴趴狗挂件 1：角色信纸左上角 ✨ */
+#chat-offline-screen .chat-msg--assistant .chat-msg-bubble-stack.chat-f2f-diary-sheet::before {
+  content: "";
+  position: absolute;
+  top: -18px; left: -18px; 
+  width: 55px; height: 55px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/accd16bddfe76e590eea127cc5b2902a.png");
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  z-index: 5; pointer-events: none;
+}
+
+
+/* ✨ 趴趴狗挂件 2：用户信纸右上角 ✨ */
+#chat-offline-screen .chat-msg--user .chat-msg-bubble-stack.chat-f2f-diary-sheet::after {
+  content: "";
+  position: absolute;
+  top: -18px; right: -18px; 
+  width: 55px; height: 55px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/771ed29bbd3930919d3bf25958a73a6a.png");
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  z-index: 5; pointer-events: none;
+}
+
+
+/* 正文排版 */
+#chat-offline-screen .chat-msg-bubble-prose.rich-prose {
+  font-family: var(--f2f-diary-serif);
+  line-height: 1.85;
+}
+
+
+/* 消息旁快捷按钮 */
+#chat-offline-screen .chat-msg-quick-btn { color: var(--text-sub); }
+
+
+
+/* 🌟 底部输入 · 布丁打字面板 🌟 */
+#chat-offline-screen .chat-composer.chat-composer--f2f-prose {
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+}
+#chat-offline-screen #chat-composer.chat-composer--f2f-prose .chat-slab-panel.chat-composer-panel {
+  background: var(--bg-bubble-user) !important; /* 变成布丁黄面板 */
+  border: 1px dashed var(--f2f-card-border);
+  box-shadow: var(--f2f-diary-shadow);
+  border-radius: 24px !important;
+  position: relative;
+  overflow: visible !important;
+}
+#chat-offline-screen.chat-offline--thread-bg #chat-composer.chat-composer--f2f-prose .chat-slab-panel.chat-composer-panel {
+  background: var(--bg-bubble-user) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#chat-offline-screen .chat-f2f-diary-compose-meta { border-bottom-color: rgba(86, 54, 36, 0.1); }
+#chat-offline-screen .chat-f2f-diary-compose-date { color: var(--text-sub); }
+#chat-offline-screen .chat-composer--f2f-prose .chat-input {
+  color: var(--text-main);
+  font-family: var(--f2f-diary-serif);
+}
+#chat-offline-screen .chat-composer--f2f-prose .chat-more-btn { color: var(--text-sub); }
+
+
+/* 重点发送键 */
+#chat-offline-screen .chat-composer--f2f-prose .chat-send-fab { 
+  background: var(--accent); 
+  color: var(--text-main) !important; 
+  box-shadow: 0 2px 8px rgba(250, 219, 95, 0.4); 
+  border-radius: 50%; 
+  opacity: 1 !important;
+}
+
+
+/* ✨ 探头小狗挂件 3：输入面板的右上角 ✨ */
+#chat-offline-screen #chat-composer.chat-composer--f2f-prose .chat-slab-panel.chat-composer-panel::after {
+  content: "";
+  position: absolute;
+  top: -26px; /* 从输入面板顶端探头出来 */
+  right: 12px; 
+  width: 60px;
+  height: 60px;
+  background-image: url("https://s1.imagehub.cc/images/2026/07/25/817ea6ba87a91990301aa6070f2e3b16.png");
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  z-index: 10; pointer-events: none;
+  transform: rotate(8deg); /* 微微向左看你的输入 */
+  filter: drop-shadow(0 2px 4px rgba(86, 54, 36, 0.15));
+}
